@@ -6,3 +6,9 @@
  ::name
  (fn [db]
    (:name db)))
+
+
+(re-frame/reg-sub
+ ::members
+ (fn [db]
+   (:data db)))
