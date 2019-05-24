@@ -4,22 +4,34 @@
    [gh-users.subs :as subs]))
    
 
-(defn table []
+(def sample-data
+  [{:login "a" :avatar_url "https://avatars2.githubusercontent.com/u/8406752?v=4"}
+   {:login "b" :avatar_url "https://avatars2.githubusercontent.com/u/20769821?v=4"}
+   {:login "c" :avatar_url "https://avatars2.githubusercontent.com/u/20963836?v=4"}
+   {:login "d" :avatar_url "https://avatars2.githubusercontent.com/u/16223682?v=4"}])
+
+(defn table-row [data]
+  "Renders an individual table row"
+  [:tr 
+     [:td
+      [:img.avatar {:src (:avatar_url data) :alt (:login data)}]]
+     [:td
+      [:a {:href "http://example.com"} (:login data)]]])
+  
+
+(defn table [rows]
   [:table.u-full-width
    [:thead
     [:tr
      [:th "Avatar"]
      [:th "Name"]]]
    [:tbody
-    [:tr 
-     [:td
-      [:img.avatar {:src "https://ui-avatars.com/api/?name=John+Doe"}]]
-     [:td
-      [:a {:href "http://example.com"} "John Doe"]]]]])
+    (for [item rows]
+      ^{:key (:login item)} [table-row item])]])
 
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])]
     [:div.container
      [:h1 "Hello from " @name]
-     [table]]))
+     [table sample-data]]))
